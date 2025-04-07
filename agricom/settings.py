@@ -128,3 +128,12 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+LEAFLET_CONFIG = {
+    'DEFAULT_CENTER': (0.0236, 37.9062),
+    'DEFAULT_ZOOM':5,
+    'MAX_ZOOM':8,
+    'MIN_ZOOM':3,
+    'SCALE':'both',#imperial
+    'ATTRIBUTION_PREFIX':'Inspired by SpatialNex',
+}
