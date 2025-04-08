@@ -16,19 +16,21 @@
 </head>
 <body>
     <br>
-    <div id='gis'>
-        
+   
     <script type="text/javascript">
         function out_layers(map){
-            var datasets=new.L.GeoJSON.AJAX ("{% url 'county_datasets' %}", {
-
-            });
-
-            datasets.addTo(map);
+            // Fetch the GeoJSON data from the server
+            fetch("{% url 'county_datasets' %}")
+                .then(response => response.json())  // Parse the JSON response
+                .then(data => {
+                    // Add the GeoJSON data to the map
+                    L.geoJSON(data).addTo(map);
+                })
+                .catch(error => {
+                    console.error('Error loading the GeoJSON data:', error);
+                });
         }
-
     </script>
-
     {% leaflet_map "gis" callback="window.out_layers" %}
     
 </body>
