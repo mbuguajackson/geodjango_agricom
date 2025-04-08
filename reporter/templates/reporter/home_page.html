@@ -15,8 +15,21 @@
     <style type="text/javascript" src=" {% static 'dist/leaflet.ajax.js' %}"></style>
 </head>
 <body>
+    <br>
+    <div id='gis'>
+        
+    <script type="text/javascript">
+        function out_layers(map){
+            var datasets=new.L.GeoJSON.AJAX ("{% url 'county_datasets' %}", {
 
-    {% leaflet_map "gis" %}
+            });
+
+            datasets.addTo(map);
+        }
+
+    </script>
+
+    {% leaflet_map "gis" callback="window.out_layers" %}
     
 </body>
 </html>

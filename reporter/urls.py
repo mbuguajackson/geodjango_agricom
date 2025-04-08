@@ -1,10 +1,12 @@
 from django.contrib import admin
 from django.urls import path
 
-from .views import HomePageView
+from .views import *
 
 urlpatterns = [
     path('', HomePageView),
-    path('county_data$', HomePageView),
-    path('incidents$')
+    #load data into our application
+    path('county_data/', county_datasets, name='county_datasets'),
+    path('incidence_data/', HomePageView),
+  
 ]

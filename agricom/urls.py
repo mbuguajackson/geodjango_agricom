@@ -16,8 +16,8 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-import reporter
 import reporter.urls
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
