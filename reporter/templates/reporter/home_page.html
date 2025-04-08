@@ -43,7 +43,7 @@
                     L.geoJSON(data, {
                         onEachFeature: function (feature, layer) {
                             // Assuming your GeoJSON has a 'description' property for the popup
-                            layer.bindPopup('<strong>' + feature.properties.name);
+                            layer.bindPopup('<strong>' + feature.properties.name.toString);
                         }
                     }).addTo(map);
                 })

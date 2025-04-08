@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+{% load leaflet_tags %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% leaflet_js %}
+    {% leaflet_css %}
+    <title>Document</title>
+    <style type="text/css">
+        #gis {width:80%;height: 700px;}
+    </style>
+
+    <script type="text/javascript" src=" {% static 'dist/leaflet.ajax.min.js' %}"></script>
+</head>
+<body>
+    <br>
+    <script type="text/javascript" >
+        function our_layers(map,options){
+            var county_data=new L.GeoJSON.AJAX("{% url 'county_datasets' %}", {
+                onEachFeature: function(feature,layer){
+                    layer.bindPopup(feature.properties.pk);
+                }
+
+            });
+            
+
+            var incidence_data=new L.GeoJSON.AJAX("{% url 'incidents' %}", {
+                onEachFeature: function(feature,layer){
+                    layer.bindPopup(feature.properties.name);
+                }
+                
+
+            });
+
+            county_data.addTo(map);
+            incidence_data.addTo(map);
+            
+
+        }
+       
+
+    </script>
+
+    {% leaflet_map "gis" callback="window.our_layers" %}
+    
+    
+</body>
+</html>
