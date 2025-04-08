@@ -1,24 +1,48 @@
 <!DOCTYPE html>
 <html lang="en">
-{% load static %}
-{% load leaflet_tags %}
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  {% load static %}
+  {% load leaflet_tags %}
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     {% leaflet_js %}
     {% leaflet_css %}
     <title>Document</title>
     <style type="text/css">
-        #gis {width:80%;height: 700px;}
+      #gis {
+        width: 80%;
+        height: 700px;
+      }
     </style>
+    <link rel="stylesheet" href="{% static 'leaflet_group_layer_control/leaflet.groupedlayercontrol.min.css' %}">
 
     <script type="text/javascript" src=" {% static 'dist/leaflet.ajax.min.js' %}"></script>
-</head>
-<body>
-    <br>
-    <script type="text/javascript" >
+    <script type="text/javascript" src=" {% static 'leaflet_group_layer_control/leaflet.groupedlayercontrol.min.js' %}"></script>
+    
+
+  </head>
+  <body>
+    <br />
+    <script type="text/javascript">
         function our_layers(map,options){
+            var osm= L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png')
             var county_data=new L.GeoJSON.AJAX("{% url 'county_datasets' %}", {
+                style: function colors(feature){
+                    switch(feature.properties.pk){
+                        case 'Wajir':
+                         return{
+                            color: 'orange',
+                            fillOpacity: 0.8
+                         };
+                         break
+                         case 'Isiolo':
+                         return{
+                            color: 'green',
+                            fillOpacity:0.8
+                         };
+                    }
+
+                },
                 onEachFeature: function(feature,layer){
                     layer.bindPopup(feature.properties.pk);
                 }
@@ -36,6 +60,19 @@
 
             county_data.addTo(map);
             incidence_data.addTo(map);
+
+            var baseLayers={
+                "OSM":osm
+            }
+
+            var groupedOverlays = {
+                "Layers": {
+                  "Counties": county_data,
+                  "incidents": incidence_data
+                }
+              };
+              
+              L.control.groupedLayers(baseLayers, groupedOverlays).addTo(map);
             
 
         }
@@ -43,8 +80,6 @@
 
     </script>
 
-    {% leaflet_map "gis" callback="window.our_layers" %}
-    
-    
-</body>
+    {% leaflet_map 'gis' callback='window.our_layers' %}
+  </body>
 </html>
