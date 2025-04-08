@@ -16,9 +16,8 @@
 </head>
 <body>
     <br>
-   
     <script type="text/javascript">
-        function out_layers(map){
+        function out_layers(map) {
             // Fetch the GeoJSON data from the server
             fetch("{% url 'county_datasets' %}")
                 .then(response => response.json())  // Parse the JSON response
@@ -31,7 +30,8 @@
                 });
         }
     </script>
-    {% leaflet_map "gis" callback="window.out_layers" %}
+
+    {% leaflet_map "gis" callback="window.out_layers"%}
     
 </body>
 </html>
