@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     {% leaflet_js %}
     {% leaflet_css %}
-    <title>Document</title>
+    <title>Agricom</title>
     <style type="text/css">
       #gis {
         width: 80%;
@@ -16,8 +16,11 @@
     </style>
     <link rel="stylesheet" href="{% static 'leaflet_group_layer_control/leaflet.groupedlayercontrol.min.css' %}">
 
+    <link rel="stylesheet" href="{% static 'routing/leaflet-routing-machine.css' %}">
+
     <script type="text/javascript" src=" {% static 'dist/leaflet.ajax.min.js' %}"></script>
     <script type="text/javascript" src=" {% static 'leaflet_group_layer_control/leaflet.groupedlayercontrol.min.js' %}"></script>
+    <script type="text/javascript" src=" {% static 'routing/leaflet-routing-machine.js' %}"></script>
     
 
   </head>
@@ -25,7 +28,8 @@
     <br />
     <script type="text/javascript">
         function our_layers(map,options){
-            var osm= L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png')
+            var osm= L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png')
+            var openTopo = L.tileLayer('https://opentopomap.org/{z}/{x}/{y}.png')
             var county_data=new L.GeoJSON.AJAX("{% url 'county_datasets' %}", {
                 style: function colors(feature){
                     switch(feature.properties.pk){
@@ -61,8 +65,12 @@
             county_data.addTo(map);
             incidence_data.addTo(map);
 
+            // ✅ Add OSM to map to make it the default
+            openTopo.addTo(map);
+
             var baseLayers={
-                "OSM":osm
+                "OSM":osm,
+                "OpenTopoMap": openTopo
             }
 
             var groupedOverlays = {
@@ -73,6 +81,14 @@
               };
               
               L.control.groupedLayers(baseLayers, groupedOverlays).addTo(map);
+              
+              /*Routing control*/
+              L.Routing.control({
+                waypoints: [
+                  L.latLng(-0.23, 36.87),
+                  L.latLng(0.23, 37.64)
+                ]
+              }).addTo(map);
             
 
         }
